@@ -8,6 +8,7 @@ import com.example.complaint_reporting_api_v2.entity.UserEntity;
 import com.example.complaint_reporting_api_v2.repository.ComplaintRepository;
 import com.example.complaint_reporting_api_v2.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -45,5 +46,17 @@ public class ComplaintService {
                 .status(saved.getStatus())
                 .createdAt(saved.getCreatedAt())
                 .build();
+    }
+
+    public ResponseEntity<String> deleteComplaint(Long id){
+        ComplaintEntity c = complaintRepository.findById(id).orElse(null);
+
+        if(c == null) return ResponseEntity.notFound().build();
+
+        c.setDeletedAt(LocalDateTime.now());
+        
+        complaintRepository.save(c);
+
+        return ResponseEntity.ok("Complaint number " + c.getComplaintId() + " from user " + c.getUser().getEmail() + " has been deleted!");
     }
 }
