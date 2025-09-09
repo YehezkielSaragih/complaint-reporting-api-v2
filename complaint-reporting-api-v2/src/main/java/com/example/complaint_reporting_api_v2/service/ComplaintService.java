@@ -62,7 +62,7 @@ public class ComplaintService {
             try {
                 ComplaintStatusEnum stats = ComplaintStatusEnum.valueOf(status.toUpperCase());
                 listData = listData.stream()
-                        .filter(c -> c.getStatus() == stats)
+                        .filter(c -> c.getStatus().equals(stats.name()))
                         .toList();
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException("Invalid status");
