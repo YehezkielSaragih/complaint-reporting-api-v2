@@ -3,6 +3,7 @@ package com.example.complaint_reporting_api_v2.service;
 import com.example.complaint_reporting_api_v2.dto.complaint.CreateComplaintRequest;
 import com.example.complaint_reporting_api_v2.dto.complaint.CreateComplaintResponse;
 import com.example.complaint_reporting_api_v2.dto.complaint.FindAllComplaintResponse;
+import com.example.complaint_reporting_api_v2.dto.complaint.GetComplaintResponse;
 import com.example.complaint_reporting_api_v2.entity.ComplaintEntity;
 import com.example.complaint_reporting_api_v2.entity.ComplaintStatusEnum;
 import com.example.complaint_reporting_api_v2.entity.UserEntity;
@@ -91,5 +92,20 @@ public class ComplaintService {
                         .updatedAt(c.getUpdatedAt())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public ResponseEntity<GetComplaintResponse> getComplaintDetail(Long id){
+        ComplaintEntity c = complaintRepository.findById(id).orElse(null);
+
+        if(c == null) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(
+                GetComplaintResponse.builder()
+                        .complaintId(c.getComplaintId())
+                        .userEmail(c.getUser().getEmail())
+                        .description(c.getDescription())
+                        .status(c.getStatus())
+                        .build()
+        );
     }
 }
