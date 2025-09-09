@@ -51,6 +51,19 @@ public class ComplaintService {
                 .build();
     }
 
+
+    public ResponseEntity<String> deleteComplaint(Long id){
+        ComplaintEntity c = complaintRepository.findById(id).orElse(null);
+
+        if(c == null) return ResponseEntity.notFound().build();
+
+        c.setDeletedAt(LocalDateTime.now());
+        
+        complaintRepository.save(c);
+
+        return ResponseEntity.ok("Complaint number " + c.getComplaintId() + " from user " + c.getUser().getEmail() + " has been deleted!");
+    }
+  
     // Find all
     public List<FindAllComplaintResponse> findAllComplaint(String status){
         // Find data
