@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: demo-jpa
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:${DB_PORT:5432}/${DB_NAME:appdb}
+    username: ${DB_USER:appuser}
+    password: ${DB_PASS:apppass}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      auto-commit: false
+      pool-name: HikariPool
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update # dev only; prod pakai Flyway/Liquibase
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: Asia/Jakarta
+
+  jackson:
+    time-zone: Asia/Jakarta
+
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:postgresql://db:5432/${DB_NAME:appdb}
+    username: ${DB_USER:appuser}
+    password: ${DB_PASS:apppass}
