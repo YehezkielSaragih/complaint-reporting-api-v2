@@ -84,6 +84,7 @@ public class ComplaintService {
         // Return DTO
         return listData.stream()
                 .map(c -> FindAllComplaintResponse.builder()
+                        .complaintId(c.getComplaintId())
                         .email(c.getUser().getEmail())
                         .description(c.getDescription())
                         .status(c.getStatus())
