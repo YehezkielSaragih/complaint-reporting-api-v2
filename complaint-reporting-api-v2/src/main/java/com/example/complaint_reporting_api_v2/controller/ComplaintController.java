@@ -3,6 +3,7 @@ package com.example.complaint_reporting_api_v2.controller;
 import com.example.complaint_reporting_api_v2.dto.complaint.CreateComplaintRequest;
 import com.example.complaint_reporting_api_v2.dto.complaint.CreateComplaintResponse;
 import com.example.complaint_reporting_api_v2.dto.complaint.FindAllComplaintResponse;
+import com.example.complaint_reporting_api_v2.dto.complaint.GetComplaintResponse;
 import com.example.complaint_reporting_api_v2.entity.ComplaintEntity;
 import com.example.complaint_reporting_api_v2.service.ComplaintService;
 import jakarta.validation.Valid;
@@ -33,5 +34,10 @@ public class ComplaintController {
     @GetMapping
     public List<FindAllComplaintResponse> getAllComplaint(@RequestParam(required = false) String status){
         return complaintService.findAllComplaint(status);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GetComplaintResponse> getComplaintDetail(@PathVariable Long id){
+        return complaintService.getComplaintDetail(id);
     }
 }
