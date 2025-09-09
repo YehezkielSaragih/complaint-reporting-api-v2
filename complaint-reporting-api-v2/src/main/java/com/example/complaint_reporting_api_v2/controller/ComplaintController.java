@@ -5,7 +5,6 @@ import com.example.complaint_reporting_api_v2.entity.ComplaintEntity;
 import com.example.complaint_reporting_api_v2.service.ComplaintService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -33,9 +32,16 @@ public class ComplaintController {
         return complaintService.findAllComplaint(status);
     }
 
+    // Update complaint status
+    @PutMapping("/{id}")
+    public UpdateComplaintStatusResponse updateComplaintStatus(@PathVariable Long id,
+                                                               @RequestBody UpdateComplaintStatusRequest status) {
+        return complaintService.updateComplaintStatus(id, status);
+
     @GetMapping("/{id}")
     public ResponseEntity<GetComplaintResponse> getComplaintDetail(@PathVariable Long id){
         return complaintService.getComplaintDetail(id);
+
     }
 
     @GetMapping("/statistics")
