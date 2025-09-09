@@ -1,9 +1,6 @@
 package com.example.complaint_reporting_api_v2.service;
 
-import com.example.complaint_reporting_api_v2.dto.complaint.CreateComplaintRequest;
-import com.example.complaint_reporting_api_v2.dto.complaint.CreateComplaintResponse;
-import com.example.complaint_reporting_api_v2.dto.complaint.FindAllComplaintResponse;
-import com.example.complaint_reporting_api_v2.dto.complaint.GetComplaintResponse;
+import com.example.complaint_reporting_api_v2.dto.complaint.*;
 import com.example.complaint_reporting_api_v2.entity.ComplaintEntity;
 import com.example.complaint_reporting_api_v2.entity.ComplaintStatusEnum;
 import com.example.complaint_reporting_api_v2.entity.UserEntity;
@@ -16,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -107,5 +105,19 @@ public class ComplaintService {
                         .status(c.getStatus())
                         .build()
         );
+    }
+
+    public ResponseEntity<ComplaintStatisticsResponse> getComplaintStatistic(){
+        List<ComplaintEntity> complainList = complaintRepository.findAll();
+        Map<String, Long> statusCounts = complainList.stream()
+                .collect(Collectors.groupingBy(ComplaintEntity::getStatus, Collectors.counting()));
+
+        ComplaintStatisticsResponse c = ComplaintStatisticsResponse.builder()
+                .open(statusCounts.getOrDefault("OPEN", 0L))
+                .inProgress(statusCounts.getOrDefault("IN_PROGRESS", 0L))
+                .resolved(statusCounts.getOrDefault("RESOLVED", 0L))
+                .build();
+
+        return ResponseEntity.ok(c);
     }
 }
