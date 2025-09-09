@@ -2,6 +2,7 @@ package com.example.complaint_reporting_api_v2.service;
 
 import com.example.complaint_reporting_api_v2.dto.complaint.CreateComplaintRequest;
 import com.example.complaint_reporting_api_v2.dto.complaint.CreateComplaintResponse;
+import com.example.complaint_reporting_api_v2.dto.complaint.FindAllComplaintResponse;
 import com.example.complaint_reporting_api_v2.entity.ComplaintEntity;
 import com.example.complaint_reporting_api_v2.entity.ComplaintStatusEnum;
 import com.example.complaint_reporting_api_v2.entity.UserEntity;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ComplaintService {
@@ -48,6 +51,7 @@ public class ComplaintService {
                 .build();
     }
 
+
     public ResponseEntity<String> deleteComplaint(Long id){
         ComplaintEntity c = complaintRepository.findById(id).orElse(null);
 
@@ -58,5 +62,34 @@ public class ComplaintService {
         complaintRepository.save(c);
 
         return ResponseEntity.ok("Complaint number " + c.getComplaintId() + " from user " + c.getUser().getEmail() + " has been deleted!");
+    }
+  
+    // Find all
+    public List<FindAllComplaintResponse> findAllComplaint(String status){
+        // Find data
+        List<ComplaintEntity> listData = complaintRepository.findAll().stream()
+                .filter(c -> c.getDeletedAt() == null)
+                .collect(Collectors.toList());
+        // Filter by status
+        if (status != null && !status.isBlank()) {
+            try {
+                ComplaintStatusEnum stats = ComplaintStatusEnum.valueOf(status.toUpperCase());
+                listData = listData.stream()
+                        .filter(c -> c.getStatus() == stats)
+                        .toList();
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Invalid status");
+            }
+        }
+        // Return DTO
+        return listData.stream()
+                .map(c -> FindAllComplaintResponse.builder()
+                        .email(c.getUser().getEmail())
+                        .description(c.getDescription())
+                        .status(c.getStatus())
+                        .createdAt(c.getCreatedAt())
+                        .updatedAt(c.getUpdatedAt())
+                        .build())
+                .collect(Collectors.toList());
     }
 }
