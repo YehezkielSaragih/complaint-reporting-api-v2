@@ -20,5 +20,5 @@ public class GetUserComplaintResponse {
     private String description;
 
     @JsonProperty("status")
-    private ComplaintStatusEnum status;
+    private String status;
 }

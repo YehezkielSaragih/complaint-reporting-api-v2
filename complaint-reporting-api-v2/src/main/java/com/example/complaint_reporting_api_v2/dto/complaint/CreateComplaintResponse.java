@@ -29,7 +29,7 @@ public class CreateComplaintResponse {
 
     @NotNull
     @JsonProperty("status")
-    private ComplaintStatusEnum status;
+        private String status;
 
     @NotNull
     @JsonProperty("created_at")

@@ -28,7 +28,7 @@ public class ComplaintEntity {
     private String description;
 
     @Column(nullable = false)
-    private ComplaintStatusEnum status;
+    private String status;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

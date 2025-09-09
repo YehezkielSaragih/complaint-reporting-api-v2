@@ -14,7 +14,7 @@ spring:
       pool-name: HikariPool
 
   jpa:
-    open-in-view: false
+    open-in-view: true
     hibernate:
       ddl-auto: update # dev only; prod pakai Flyway/Liquibase
     show-sql: false

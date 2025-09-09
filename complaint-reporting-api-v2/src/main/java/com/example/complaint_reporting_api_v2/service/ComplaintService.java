@@ -30,7 +30,7 @@ public class ComplaintService {
         // Logic
         ComplaintEntity complaint = ComplaintEntity.builder()
                 .description(request.getDescription())
-                .status(ComplaintStatusEnum.OPEN) // default status
+                .status(ComplaintStatusEnum.OPEN.toString())
                 .user(user)
                 .createdAt(LocalDateTime.now())
                 .build();
