@@ -116,4 +116,19 @@ public class ComplaintService {
                 .updatedAt(updated.getUpdatedAt())
                 .build();
     }
+
+    public ResponseEntity<GetComplaintResponse> getComplaintDetail(Long id){
+        ComplaintEntity c = complaintRepository.findById(id).orElse(null);
+
+        if(c == null) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(
+                GetComplaintResponse.builder()
+                        .complaintId(c.getComplaintId())
+                        .userEmail(c.getUser().getEmail())
+                        .description(c.getDescription())
+                        .status(c.getStatus())
+                        .build()
+        );
+    }
 }

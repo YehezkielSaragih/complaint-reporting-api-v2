@@ -37,5 +37,10 @@ public class ComplaintController {
     public UpdateComplaintStatusResponse updateComplaintStatus(@PathVariable Long id,
                                                                @RequestBody UpdateComplaintStatusRequest status) {
         return complaintService.updateComplaintStatus(id, status);
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GetComplaintResponse> getComplaintDetail(@PathVariable Long id){
+        return complaintService.getComplaintDetail(id);
+
     }
 }
