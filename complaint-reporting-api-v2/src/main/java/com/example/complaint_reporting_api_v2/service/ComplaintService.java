@@ -1,8 +1,6 @@
 package com.example.complaint_reporting_api_v2.service;
 
-import com.example.complaint_reporting_api_v2.dto.complaint.CreateComplaintRequest;
-import com.example.complaint_reporting_api_v2.dto.complaint.CreateComplaintResponse;
-import com.example.complaint_reporting_api_v2.dto.complaint.FindAllComplaintResponse;
+import com.example.complaint_reporting_api_v2.dto.complaint.*;
 import com.example.complaint_reporting_api_v2.entity.ComplaintEntity;
 import com.example.complaint_reporting_api_v2.entity.ComplaintStatusEnum;
 import com.example.complaint_reporting_api_v2.entity.UserEntity;
@@ -15,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -91,5 +90,30 @@ public class ComplaintService {
                         .updatedAt(c.getUpdatedAt())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public UpdateComplaintStatusResponse updateComplaintStatus(Long id, UpdateComplaintStatusRequest request) {
+        // Find Complaint
+        ComplaintEntity complaint = complaintRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Complaint id not found"));
+        // Validation
+        ComplaintStatusEnum statusEnum;
+        try {
+            statusEnum = ComplaintStatusEnum.valueOf(request.getStatus().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid status value: " + request.getStatus());
+        }
+        // Update status & timestamps
+        complaint.setStatus(request.getStatus());
+        complaint.setUpdatedAt(LocalDateTime.now());
+        ComplaintEntity updated = complaintRepository.save(complaint);
+        // Mapping ke DTO
+        return UpdateComplaintStatusResponse.builder()
+                .email(updated.getUser().getEmail())
+                .description(updated.getDescription())
+                .status(updated.getStatus())
+                .createdAt(updated.getCreatedAt())
+                .updatedAt(updated.getUpdatedAt())
+                .build();
     }
 }
