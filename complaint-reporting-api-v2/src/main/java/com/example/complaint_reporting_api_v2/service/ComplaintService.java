@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -130,5 +131,19 @@ public class ComplaintService {
                         .status(c.getStatus())
                         .build()
         );
+    }
+
+    public ResponseEntity<ComplaintStatisticsResponse> getComplaintStatistic(){
+        List<ComplaintEntity> complainList = complaintRepository.findAll();
+        Map<String, Long> statusCounts = complainList.stream()
+                .collect(Collectors.groupingBy(ComplaintEntity::getStatus, Collectors.counting()));
+
+        ComplaintStatisticsResponse c = ComplaintStatisticsResponse.builder()
+                .open(statusCounts.getOrDefault("OPEN", 0L))
+                .inProgress(statusCounts.getOrDefault("IN_PROGRESS", 0L))
+                .resolved(statusCounts.getOrDefault("RESOLVED", 0L))
+                .build();
+
+        return ResponseEntity.ok(c);
     }
 }

@@ -43,4 +43,9 @@ public class ComplaintController {
         return complaintService.getComplaintDetail(id);
 
     }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<ComplaintStatisticsResponse> getComplaintStatistic(){
+        return complaintService.getComplaintStatistic();
+    }
 }
