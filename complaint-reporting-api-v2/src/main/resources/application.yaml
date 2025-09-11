@@ -4,7 +4,7 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:${DB_PORT:5432}/${DB_NAME:appdb}
+    url: jdbc:postgresql://localhost:${DB_PORT:5432}/${DB_NAME:usercomplaint}
     username: ${DB_USER:appuser}
     password: ${DB_PASS:apppass}
     hikari:
@@ -40,12 +40,17 @@ management:
       probes:
         enabled: true
 
+app:
+  jwt:
+    secret: "ZmFrZV9yYW5kb21fc2VjcmV0X2NoYW5nZV9tZV9sYXRlcg=="
+    expiration-ms: 3600000
+
 ---
 spring:
   config:
     activate:
       on-profile: docker
   datasource:
-    url: jdbc:postgresql://db:5432/${DB_NAME:appdb}
+    url: jdbc:postgresql://db:5432/${DB_NAME:usercomplaint}
     username: ${DB_USER:appuser}
     password: ${DB_PASS:apppass}

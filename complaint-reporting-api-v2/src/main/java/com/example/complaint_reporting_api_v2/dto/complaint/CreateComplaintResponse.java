@@ -18,20 +18,18 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CreateComplaintResponse {
 
-    @NotBlank
-    @Email
+    @JsonProperty("complaint_id")
+    private Long complaintId;
+
     @JsonProperty("email")
     private String email;
 
-    @NotBlank
     @JsonProperty("description")
     private String description;
 
-    @NotNull
     @JsonProperty("status")
-        private String status;
+    private String status;
 
-    @NotNull
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
 }

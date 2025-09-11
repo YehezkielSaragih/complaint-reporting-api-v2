@@ -1,10 +1,6 @@
 package com.example.complaint_reporting_api_v2.dto.complaint;
 
-import com.example.complaint_reporting_api_v2.entity.ComplaintStatusEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FindAllComplaintResponse {
+public class GetAllComplaintResponse {
 
     @JsonProperty("complaint_id")
     private Long complaintId;

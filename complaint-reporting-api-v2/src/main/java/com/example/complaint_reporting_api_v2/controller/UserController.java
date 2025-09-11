@@ -6,7 +6,6 @@ import com.example.complaint_reporting_api_v2.dto.user.GetUserComplaintResponse;
 import com.example.complaint_reporting_api_v2.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,16 +15,19 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public UserController(UserService userService){
+        this.userService=userService;
+    }
+
+    @PostMapping
     public ResponseEntity<CreateUserResponse> createUser(@Valid @RequestBody CreateUserRequest req){
-        return userService.createUser(req);
+        return ResponseEntity.ok(userService.createUser(req));
     }
 
     @GetMapping("/{id}/complaints")
     public ResponseEntity<List<GetUserComplaintResponse>> getUserComplaints(@PathVariable Long id){
-        return userService.getUserComplaints(id);
+        return ResponseEntity.ok(userService.getUserComplaints(id));
     }
 }
